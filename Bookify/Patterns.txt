@@ -1,0 +1,9 @@
+- Static Factory Pattern
+
+Used to create an object without exposing the creation logic to the client and refer to a newly created object using a common interface.
+Can be used to do some side effect when creating an object.
+
+- Primitive obsession (anti-pattern)
+Use a class instead of a primitive type to represent a concept.
+In this project, instead of a class, I`m using a record to represent the concept of a Address
+Records is good to this aproach because it is immutable.
