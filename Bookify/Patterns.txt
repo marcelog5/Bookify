@@ -10,3 +10,6 @@ Records is good to this aproach because it is immutable.
 
 - Domain Event Pattern
 It's almost like a observer pattern, but it is used to represent a domain event that occurred in the system.
+
+- Unit of Work
+It is used to group a set of operations that need to be executed in a single transaction.
