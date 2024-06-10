@@ -1,4 +1,4 @@
-﻿namespace Domain.Apartments
+﻿namespace Domain.Shared
 {
     public record Currency
     {
@@ -17,11 +17,11 @@
                 throw new ApplicationException($"The currency code is invalid");
         }
 
-        public static readonly IReadOnlyCollection<Currency> All = new[] 
-        { 
-            Brl, 
-            Usd, 
-            Eur 
+        public static readonly IReadOnlyCollection<Currency> All = new[]
+        {
+            Brl,
+            Usd,
+            Eur
         };
     }
 }

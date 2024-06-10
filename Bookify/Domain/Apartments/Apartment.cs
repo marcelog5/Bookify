@@ -1,4 +1,5 @@
 ﻿using Domain.Abstracts;
+using Domain.Shared;
 
 namespace Domain.Apartments
 {
