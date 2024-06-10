@@ -1,4 +1,5 @@
 ﻿using Domain.Abstracts;
+using Domain.Users.Events;
 
 namespace Domain.Users
 {
@@ -23,7 +24,12 @@ namespace Domain.Users
         // Static Factory Pattern
         public static User Create(FirstName firstName, LastName lastName, Email email)
         {
-            return new User(Guid.NewGuid(), firstName, lastName, email);
+            User user = new User(Guid.NewGuid(), firstName, lastName, email);
+        
+            // Add Domain Event
+            user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
+
+            return user;
         }
     }
 }

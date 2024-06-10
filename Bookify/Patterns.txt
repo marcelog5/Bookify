@@ -7,3 +7,6 @@ Can be used to do some side effect when creating an object.
 Use a class instead of a primitive type to represent a concept.
 In this project, instead of a class, I`m using a record to represent the concept of a Address
 Records is good to this aproach because it is immutable.
+
+- Domain Event Pattern
+It's almost like a observer pattern, but it is used to represent a domain event that occurred in the system.
