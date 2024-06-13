@@ -1,9 +1,9 @@
-﻿using Application.Abstracts.Messaging;
+﻿using Application.Abstracts.Clock;
+using Application.Abstracts.Messaging;
 using Domain.Abstracts;
 using Domain.Apartments;
 using Domain.Bookings;
 using Domain.Users;
-using MediatR;
 
 namespace Application.Bookings.ReserveBooking
 {
@@ -14,19 +14,22 @@ namespace Application.Bookings.ReserveBooking
         private readonly IbookingRepository _bookingRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly PricingService _pricingService;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
         public ReserveBookingCommandHandler(
             IUserRepository userRepository,
             IApartmentRepository apartmentRepository,
             IbookingRepository bookingRepository,
             IUnitOfWork unitOfWork,
-            PricingService pricingService)
+            PricingService pricingService,
+            IDateTimeProvider dateTimeProvider)
         {
             _userRepository = userRepository;
             _apartmentRepository = apartmentRepository;
             _bookingRepository = bookingRepository;
             _unitOfWork = unitOfWork;
             _pricingService = pricingService;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<Result<Guid>> Handle(ReserveBookingCommand request, CancellationToken cancellationToken)
@@ -56,14 +59,14 @@ namespace Application.Bookings.ReserveBooking
                 apartment,
                 user.Id,
                 duration,
-                DateTime.UtcNow,
+                _dateTimeProvider.UtcNow,
                 _pricingService);
 
             _bookingRepository.Add(booking);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            throw new NotImplementedException();
+            return booking.Id;
         }
     }
 }
