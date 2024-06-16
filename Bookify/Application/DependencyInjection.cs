@@ -1,4 +1,5 @@
-﻿using Domain.Bookings;
+﻿using Application.Abstracts.Behaviors;
+using Domain.Bookings;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application
@@ -7,7 +8,12 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddMediatR(c => c.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly));
+            services.AddMediatR(configuration =>
+            {
+                configuration.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
+                
+                configuration.AddOpenBehavior(typeof(loggingBehavior<,>));
+            });
 
             services.AddTransient<PricingService>();
 
