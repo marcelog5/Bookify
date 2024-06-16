@@ -1,10 +1,13 @@
 ﻿using Application.Abstracts.Clock;
+using Application.Abstracts.Data;
 using Application.Abstracts.Email;
+using Dapper;
 using Domain.Abstracts;
 using Domain.Apartments;
 using Domain.Bookings;
 using Domain.Users;
 using Infrastructure.Clock;
+using Infrastructure.Data;
 using Infrastructure.Email;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +38,11 @@ namespace Infrastructure
             services.AddScoped<IApartmentRepository, ApartmentRepository>();
             services.AddScoped<IbookingRepository, BookingRepository>();
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+
+            services.AddSingleton<ISqlConnectionFactory>(_ =>
+                new SqlConnectionFactory(connectionString));
+
+            SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
 
             return services;
         }
