@@ -1,4 +1,5 @@
-﻿using Domain.Abstracts;
+﻿using Application.Exceptions;
+using Domain.Abstracts;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,11 +26,18 @@ namespace Infrastructure
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            var result = await base.SaveChangesAsync(cancellationToken);
+            try
+            {
+                var result = await base.SaveChangesAsync(cancellationToken);
 
-            await PublishDomainEventsAsync();
+                await PublishDomainEventsAsync();
 
-            return result;
+                return result;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new ConcurrencyException("Concurrency exception ocurred", ex);
+            }
         }
 
         private async Task PublishDomainEventsAsync()
