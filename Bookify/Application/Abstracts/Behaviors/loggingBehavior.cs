@@ -4,13 +4,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Abstracts.Behaviors
 {
-    public class loggingBehavior<TRequest, TResponse>
+    public class LoggingBehavior<TRequest, TResponse>
         : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IBaseCommand
     {
         private readonly ILogger<TRequest> _logger;
 
-        public loggingBehavior(ILogger<TRequest> logger)
+        public LoggingBehavior(ILogger<TRequest> logger)
         {
             _logger = logger;
         }
