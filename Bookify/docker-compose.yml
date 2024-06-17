@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  api:
+    image: ${DOCKER_REGISTRY-}api
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+    depends_on:
+      - bookify-db
+
+  bookify-db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: Bookify.Db
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: 'gH9#kL$4p@3qW!'
+      SA_USER: 'sa'
+      SQL_AGENT_ENABLED: 'true'
+    volumes:
+      - ./containers/database:/var/opt/mssql
+    ports:
+      - "1433:1433"
