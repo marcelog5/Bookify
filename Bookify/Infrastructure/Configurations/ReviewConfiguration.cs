@@ -24,15 +24,18 @@ namespace Infrastructure.Configurations
 
             builder.HasOne<Apartment>()
                 .WithMany()
-                .HasForeignKey(review => review.ApartmentId);
+                .HasForeignKey(review => review.ApartmentId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne<Booking>()
                 .WithMany()
-                .HasForeignKey(review => review.BookingId);
+                .HasForeignKey(review => review.BookingId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne<User>()
                 .WithMany()
-                .HasForeignKey(review => review.UserId);
+                .HasForeignKey(review => review.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

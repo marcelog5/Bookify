@@ -452,21 +452,21 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Apartments.Apartment", null)
                         .WithMany()
                         .HasForeignKey("ApartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_reviews_apartments_apartment_id");
 
                     b.HasOne("Domain.Bookings.Booking", null)
                         .WithMany()
                         .HasForeignKey("BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_reviews_bookings_booking_id");
 
                     b.HasOne("Domain.Users.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired()
                         .HasConstraintName("fk_reviews_user_user_id");
                 });
