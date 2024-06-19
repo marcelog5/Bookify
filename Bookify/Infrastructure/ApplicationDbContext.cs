@@ -9,9 +9,7 @@ namespace Infrastructure
     {
         private readonly IPublisher _publisher;
 
-        public ApplicationDbContext(
-            DbContextOptions options,
-            IPublisher publisher) 
+        public ApplicationDbContext(DbContextOptions options, IPublisher publisher)
             : base(options)
         {
             _publisher = publisher;
@@ -36,7 +34,7 @@ namespace Infrastructure
             }
             catch (DbUpdateConcurrencyException ex)
             {
-                throw new ConcurrencyException("Concurrency exception ocurred", ex);
+                throw new ConcurrencyException("Concurrency exception occurred.", ex);
             }
         }
 
