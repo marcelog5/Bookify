@@ -50,10 +50,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(200)")
                         .HasColumnName("name");
 
-                    b.Property<long>("Version")
+                    b.Property<byte[]>("Version")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bigint")
+                        .HasColumnType("rowversion")
                         .HasColumnName("version");
 
                     b.HasKey("Id")

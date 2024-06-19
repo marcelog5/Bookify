@@ -29,7 +29,7 @@ namespace Infrastructure.Migrations
                     cleaning_fee_currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     last_booked_on_utc = table.Column<DateTime>(type: "datetime2", nullable: true),
                     amenities = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    version = table.Column<long>(type: "bigint", rowVersion: true, nullable: false)
+                    version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
                 },
                 constraints: table =>
                 {
