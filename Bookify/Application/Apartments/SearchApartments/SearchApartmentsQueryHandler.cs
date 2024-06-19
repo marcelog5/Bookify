@@ -32,7 +32,21 @@ namespace Application.Apartments.SearchApartments
 
             using var connection = _sqlConnectionFactory.CreateConnection();
 
-            const string sql = """
+            var parameters = new DynamicParameters(new
+            {
+                request.StartDate,
+                request.EndDate
+            });
+
+            // Adding status parameters dynamically
+            for (int i = 0; i < ActiveBookingStatuses.Length; i++)
+            {
+                parameters.Add($"Status{i}", ActiveBookingStatuses[i]);
+            }
+
+            var statusParameters = string.Join(", ", ActiveBookingStatuses.Select((s, i) => $"@Status{i}"));
+
+            string sql = $"""
                 SELECT
                     a.id AS Id,
                     a.name AS Name,
@@ -53,12 +67,11 @@ namespace Application.Apartments.SearchApartments
                         b.apartment_id = a.id AND
                         b.duration_start <= @EndDate AND
                         b.duration_end >= @StartDate AND
-                        b.status = ANY(@ActiveBookingStatuses)
+                        b.status IN ({statusParameters})
                 )
                 """;
 
-            var apartments = await connection.
-                QueryAsync<ApartmentResponse, AddressResponse, ApartmentResponse>(
+            var apartments = await connection.QueryAsync<ApartmentResponse, AddressResponse, ApartmentResponse>(
                 sql,
                 (apartment, address) =>
                 {
@@ -66,12 +79,7 @@ namespace Application.Apartments.SearchApartments
                     
                     return apartment;
                 },
-                new
-                {
-                    request.StartDate,
-                    request.EndDate,
-                    ActiveBookingStatuses
-                },
+                param: parameters,
                 splitOn: "Country");
 
             return apartments.ToList();
