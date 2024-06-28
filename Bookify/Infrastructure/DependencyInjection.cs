@@ -6,10 +6,12 @@ using Domain.Abstracts;
 using Domain.Apartments;
 using Domain.Bookings;
 using Domain.Users;
+using Infrastructure.Authentication;
 using Infrastructure.Clock;
 using Infrastructure.Data;
 using Infrastructure.Email;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,11 +28,27 @@ namespace Infrastructure
 
             services.AddTransient<IEmailService, EmailService>();
 
-            var connectionString =
-                configuration.GetConnectionString("Database") ??
-                throw new ArgumentNullException(nameof(configuration));
+            AddPersistence(services, configuration);
 
-            services.AddDbContext<ApplicationDbContext>(options => {
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer();
+
+            services.Configure<AuthenticationOptions>(configuration.GetSection("Authentication"));
+
+            services.ConfigureOptions<JwtBearerOptionsSetup>();
+
+            return services;
+        }
+
+        private static void AddPersistence(IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString =
+                            configuration.GetConnectionString("Database") ??
+                            throw new ArgumentNullException(nameof(configuration));
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
                 options.UseSqlServer(connectionString).UseSnakeCaseNamingConvention();
             });
 
@@ -43,8 +61,6 @@ namespace Infrastructure
                 new SqlConnectionFactory(connectionString));
 
             SqlMapper.AddTypeHandler(new DateOnlyTypeHandler());
-
-            return services;
         }
     }
 }
